@@ -8,7 +8,9 @@ This JS code will will simply take out whatever property value you will require 
 
 ### Start Using by importing module,
 
-`import { extractData } from "ApiObjectExtract.js"`
+```
+import { extractData } from "ApiObjectExtract.js"
+```
 
 ---
 
@@ -40,15 +42,16 @@ Property Name should be in array
 
 ```javascript
 object {
+  property: "value",
   property1 {
-    key: value,
-    key2: value
+    key: "key",
+    key2: "key2"
   },
   property2 {
-    key3: value,
-    key4: value,
+    key3: "key3",
+    key4: "key4",
     key5: {
-      key6: value
+      key6: "key6"
     }
   }
 }
@@ -75,7 +78,55 @@ extractData(object, required2);
 
 key concept
 
-1. First [ ] or ( array ) like Object in example above
-2. Second [ [ 'First-Element-In-Array' ] ] like property2
-3. Third [ [ 'First-Element-In-Array', [ 'key5' ] ] ] like Object.property2.key5
-4. Fourth [ [ 'First-Element-In-Array', [ 'key5' , [ 'key6' ] ] ] ] which means Object.property2.key5.key6
+1. First <mark style="background-color: purple; color: white; padding: 3px; margin: 4px;">[ ]</mark> or ( array ) is <mark style="background-color: pink">Object</mark> in example above
+2. Second [ <mark style="background-color: purple; color: white; padding: 3px; margin: 4px;">[ 'Property2' ]</mark> ] is <mark style="background-color: pink">Object.property2</mark>
+3. Third [ <mark style="background-color: purple; color: white; padding: 3px; margin: 4px;">[ 'Property2', [ 'key5' ] ]</mark> ] is Object.<mark style="background-color: pink">property2.key5</mark>
+4. Fourth [ [ 'Property2', <mark style="color: white; background-color: purple; padding: 3px; margin: 4px;">[ 'key5' , [ 'key6' ] ]</mark> ] ] which means <mark style="background-color: pink">Object.property2.key5.key6</mark>
+
+### 3. When your property is inside array
+
+syntax :
+
+```javascript
+// [['ArrayProperty', index, ["requiredProperty1", "requiredProperty2"]]]
+```
+
+```javascript
+object {
+  property: "value"
+  property1: {
+    key: "key",
+    key2: "key2"
+  },
+  property2: {
+    key3: "key3",
+    key4: "key4",
+    key5: {
+      key6: "key6"
+
+    }
+  }
+  property3: {
+      key7: [
+        0 : { 0: "yes", 1: "No" },
+        0 : { 0: "No", 1: "Yes" },
+
+      ]
+  }
+  property: [
+    0: { name: "jonas", lastName: "kafle" },
+    1: { name: "you", lastName: "shrestha" },
+    2: { name: "john", lastName: "bhandari"},
+    3: { name: "Rahul", lastName: "Niroula"}
+  ]
+
+}
+```
+
+I would want Object.property[2].name & Object.property[2].lastName but how, Here's how I would take out...
+
+[ [ 'property', 4, [ 'name', 'lastName' ] ] ]
+
+If I want **key7[0].0 and key[0].1**
+
+[ [ "property3", [ "key7", 0, [ 0, 1 ] ] ] ]
